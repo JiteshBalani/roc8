@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const Login = () => {
+
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [password, setPassword] = useState('');
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+      };
+    
     return (
         <div className='flex justify-center h-[100vh] mt-10'>
 
@@ -25,10 +33,19 @@ const Login = () => {
 
                     <div>
                         <label className='text-lg'>Password</label>
-                        <input type='text'
+                        <div className='flex justify-between p-2 bg-transparent border-[1px] rounded-md w-full'>
+                        <input type={passwordVisible ? 'text' : 'password'}
                             placeholder='Enter a strong password'
-                            className='p-2 bg-transparent border-[1px] rounded-md w-full'
+                            className='outline-none'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
+                        <span 
+                        className='cursor-pointer'
+                        onClick={togglePasswordVisibility}>
+                        {passwordVisible? 'Hide' : 'Show'}
+                        </span>
+                        </div>
                     </div>
 
                     <button className='bg-black text-white p-2 text-md rounded-md w-full font-thin pt-2'>LOGIN</button><br />
