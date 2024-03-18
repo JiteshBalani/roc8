@@ -21,7 +21,7 @@ const Protected = () => {
 
         </div>
 
-        <div className='flex-col pt-5'>
+        <div className='flex-col pt-5 space-y-4'>
 
           {categories.slice((page - 1) * 6, page * 6).map(category => (
             <div key={category.id} className='flex space-x-4 items-center'>
