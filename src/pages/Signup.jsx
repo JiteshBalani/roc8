@@ -43,7 +43,7 @@ const Signup = () => {
                 </div>
 
                 <div className='text-center pt-3'>Have an account? 
-                    <Link to='/login'><span className='font-semibold'> LOGIN</span></Link>
+                    <Link to='/'><span className='font-semibold'> LOGIN</span></Link>
                 </div>
             </div>
 

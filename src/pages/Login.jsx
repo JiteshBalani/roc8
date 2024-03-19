@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import Navbar from '../components/Navbar';
+import { doSignInWithEmailAndPassword, doCreateUserWithEmailAndPassword } from '../utils/auth';
+import { useAuth } from '../utils/AuthContext';
+import { Navigate } from 'react-router-dom';
 
 const Login = () => {
 
-    const [signIn, setSignIn] = useState(true);
+    const  { userLoggedIn }  = useAuth();
 
-    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [email, setEmail] = useState('');
+    const [signIn, setSignIn] = useState(true);
     const [password, setPassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
@@ -17,9 +21,17 @@ const Login = () => {
         setSignIn(!signIn);
     };
 
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        if(!signIn) {
+            setSignIn(true);
+            await doSignInWithEmailAndPassword(email, password)
+        }
+    }
+
     return (
         <>
-        <Navbar/>
+        {userLoggedIn && (<Navigate to={'/protected'} replace={true}/>)}
         <div className='flex justify-center h-[100vh] mt-10'>
 
             <div className='w-[576px] h-[614px] flex-col justify-center border-gray-200 border-[1px] rounded-lg px-10 pt-5 space-y-2'>
@@ -30,8 +42,7 @@ const Login = () => {
                     <>
                         <div className='font-bold w-full text-center text-xl'>Welcome back to ECOMMERCE</div>
                         <div className='w-full text-center'>The next gen business marketplace</div>
-                    </> :
-                    ''}
+                    </> : ''}
 
                 <div className='flex-col justify-center items-center space-y-4 py-8 mb-10'>
 
@@ -51,6 +62,9 @@ const Login = () => {
                         <input type='email'
                             placeholder='Type your email'
                             className='p-2 bg-transparent border-[1px] rounded-md w-full'
+                            value={email}
+                            required
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
 
@@ -61,6 +75,7 @@ const Login = () => {
                                 placeholder='Type your password'
                                 className='outline-none w-full'
                                 value={password}
+                                required
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             {password.length !== 0 ? <span
@@ -70,12 +85,11 @@ const Login = () => {
                             </span> : ''}
                         </div>
                     </div>
-
                 </div>
 
                 {signIn ?
 
-                    <div className='border-b-2 border-gray-300 pb-6'>
+                    <div onClick={onSubmit} className='border-b-2 border-gray-300 pb-6'>
                         <button className='bg-black text-white p-2 text-lg rounded-md w-full font-thin mb-1 '>LOGIN</button>
                     </div> :
                     <div className=' pb-6'>
