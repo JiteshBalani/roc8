@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const Signup = () => {
+    
     return (
         <div className='flex justify-center h-[100vh] mt-10'>
 

@@ -20,7 +20,7 @@ function App() {
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Login />,
     children:[
       {
         path: '/signup',
@@ -30,10 +30,10 @@ export const router = createBrowserRouter([
         path: '/verify',
         element: <Verify/>
       },
-      {
-        path: '/login',
-        element: <Login/>
-      },
+      // {
+      //   path: '/login',
+      //   element: <Login/>
+      // },
       {
         path: '/protected',
         element: <Protected/>
