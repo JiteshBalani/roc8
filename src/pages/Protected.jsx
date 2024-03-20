@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import generateCategories from '../utils/categories';
@@ -15,15 +15,20 @@ const Protected = () => {
     setCheckedCategories(storedCheckedCategories);
   }, []);
 
-  const handleCheckboxChange = (e, categoryId) => {
-    const isChecked = e.target.checked;
-    const updatedCheckedCategories = isChecked
-      ? [...checkedCategories, categoryId]
-      : checkedCategories.filter((id) => id !== categoryId);
+  const handleCheckboxChange = useCallback(
+    (e, categoryId) => {
+      const isChecked = e.target.checked;
+      setCheckedCategories(prevCheckedCategories => {
+        const updatedCheckedCategories = isChecked
+          ? [...prevCheckedCategories, categoryId]
+          : prevCheckedCategories.filter(id => id !== categoryId);
 
-    setCheckedCategories(updatedCheckedCategories);
-    localStorage.setItem('checkedCategories', JSON.stringify(updatedCheckedCategories));
-  };
+        localStorage.setItem('checkedCategories', JSON.stringify(updatedCheckedCategories));
+        return updatedCheckedCategories;
+      });
+    },
+    [checkedCategories] // Include checkedCategories in the dependency array
+  );
 
   return (
     <div className='flex justify-center h-[100vh] mt-10'>
@@ -40,8 +45,8 @@ const Protected = () => {
               <input
                 type='checkbox'
                 className='peer relative appearance-auto checked:bg-black shrink-0 w-6 h-5 border-2 border-black rounded-sm mt-1 focus:outline-none checked:text-white disabled:border-steel-400 disabled:bg-steel-400'
-                checked={checkedCategories.includes(category.id)}
-                onChange={(e) => handleCheckboxChange(e, category.id)}
+                // checked={checkedCategories.includes(category.id)}
+                // onChange={(e) => handleCheckboxChange(e, category.id)}
               />
               <label className='text-lg'>{category.name}</label>
             </div>
